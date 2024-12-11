@@ -19,24 +19,20 @@ import java.util.Map;
 public class CrawlPostJob implements CommonJobAction {
 
     @Autowired
-    private DriverConfig driverConfig;
+    private WebDriver remoteWebDriver;
 
     @Override
     public void run(Map<String, String> args) {
-        WebDriver driver = create();
-        driver.get("https://bonigarcia.dev/selenium-webdriver-java/");
-        System.out.println("Page title is: " + driver.getTitle());
-        driver.quit();
-    }
+        System.out.println("run https://bonigarcia.dev/selenium-webdriver-java/");
+        try{
 
-    private WebDriver create() {
-        try {
-            ChromeOptions options = new ChromeOptions();
-//            options.addArguments("--headless");
-            options.addArguments("--disable-gpu");
-            return new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Invalid URL: " + e.getMessage(), e);
+            remoteWebDriver.get("https://bonigarcia.dev/selenium-webdriver-java/");
+            System.out.println("Page title is: " + remoteWebDriver.getTitle());
+            remoteWebDriver.quit();
+        }
+        catch (Exception e){
+            remoteWebDriver.quit();
+            throw e;
         }
     }
 }

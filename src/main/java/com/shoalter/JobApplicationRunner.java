@@ -31,8 +31,8 @@ public class JobApplicationRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         var jobValues = args.getOptionValues(JOB);
 
-        if (jobValues != null && jobValues.size() > 0) {
-            String jobName = jobValues.get(0);
+        if (jobValues != null && !jobValues.isEmpty()) {
+            String jobName = jobValues.getFirst();
 
             try {
                 log.info("Execute job {} start.", jobName);
