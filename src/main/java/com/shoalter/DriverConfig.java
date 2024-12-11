@@ -1,6 +1,5 @@
 package com.shoalter;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -14,7 +13,7 @@ import java.net.URL;
 public class DriverConfig {
 
     @Bean
-    public WebDriver remoteWebDriver() throws MalformedURLException {
+    public RemoteWebDriver remoteWebDriver() throws MalformedURLException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         options.addArguments("--disable-gpu");
