@@ -8,7 +8,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -21,16 +22,11 @@ public class CrossContainerJob implements CommonJobAction {
     public void run(Map<String, String> args) {
 
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("start-maximized");
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--disable-notifications");
-        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-        options.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
 
         WebDriver driver = null;
         try {
             driver = new RemoteWebDriver(
-                    new URL("http://localhost:4444/wd/hub"),
+                    new URI("http://localhost:4444/wd/hub").toURL(),
                     options
             );
 
@@ -44,9 +40,11 @@ public class CrossContainerJob implements CommonJobAction {
             log.info("pageSource: \n{}", pageSource.substring(0, 1000));
 
         } catch (MalformedURLException e) {
-            System.err.println("Invalid URL for Remote WebDriver: " + e.getMessage());
+            log.error("Invalid URL for Remote WebDriver: {}", e.getMessage());
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error("InterruptedException: {}", e.getMessage());
+        } catch (URISyntaxException e) {
+            log.error("URISyntaxException: {}", e.getMessage());
         } finally {
             if (driver != null) {
                 driver.quit();
