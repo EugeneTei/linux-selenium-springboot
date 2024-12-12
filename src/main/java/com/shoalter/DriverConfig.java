@@ -1,6 +1,5 @@
 package com.shoalter;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.context.annotation.Bean;
@@ -13,10 +12,14 @@ import java.net.URL;
 public class DriverConfig {
 
     @Bean
-    public RemoteWebDriver remoteWebDriver() throws MalformedURLException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        return new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+    public RemoteWebDriver remoteWebDriver() {
+        try {
+            ChromeOptions options = new ChromeOptions();
+//            options.addArguments("--headless");
+//            options.addArguments("--disable-gpu");
+            return new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Failed to create remote web driver", e);
+        }
     }
 }

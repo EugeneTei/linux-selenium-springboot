@@ -1,6 +1,6 @@
 cd linux-selenium/
-mvn package #mvn package
+mvn package -DskipTests
 docker build -t linux-selenium-springboot:v1.0 -f Dockerfile .
 docker run -d -p 4444:4444 -p 7900:7900 --shm-size="2g" --name linux-selenium-springboot linux-selenium-springboot:v1.0
 docker exec -it linux-selenium-springboot /bin/bash
-java -jar /app/app.jar --JOB=crawlPostJob
+java -jar /app/app.jar --JOB=internal

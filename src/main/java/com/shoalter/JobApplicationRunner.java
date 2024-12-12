@@ -28,7 +28,7 @@ public class JobApplicationRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         var jobValues = args.getOptionValues(JOB);
 
         if (jobValues != null && !jobValues.isEmpty()) {
@@ -52,7 +52,7 @@ public class JobApplicationRunner implements ApplicationRunner {
     private Map<String, String> paramsMapper(ApplicationArguments args) {
         return args.getOptionNames()
                 .stream()
-                .filter(key -> args.getOptionValues(key) != null && args.getOptionValues(key).size() > 0)
-                .collect(Collectors.toMap(key -> key, key -> args.getOptionValues(key).get(0)));
+                .filter(key -> args.getOptionValues(key) != null && !args.getOptionValues(key).isEmpty())
+                .collect(Collectors.toMap(key -> key, key -> args.getOptionValues(key).getFirst()));
     }
 }
