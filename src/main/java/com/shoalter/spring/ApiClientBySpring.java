@@ -1,25 +1,13 @@
-package com.shoalter.test;
+package com.shoalter.spring;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shoalter.FakeSslUtil;
 import com.shoalter.test.pojo.ProxyDo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.hc.client5.http.config.RequestConfig;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
-import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
-import org.apache.hc.client5.http.ssl.TrustSelfSignedStrategy;
-import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.ssl.SSLContextBuilder;
-import org.apache.hc.core5.ssl.SSLContexts;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -28,35 +16,27 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.*;
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.nio.file.Files;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 @Slf4j
-public class ApiClient {
+public class ApiClientBySpring {
 
     private static final String URL = "https://www.facebook.com/api/graphql/";
 
     public static void main(String[] args) throws Exception {
 
         List<ProxyDo> proxyDoList = getProxyList();
+
+        System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "false");
+        System.setProperty("jdk.http.auth.proxying.disabledSchemes", "false");
 
         for (int i = 0; i < 20; i++) {
             log.info("Round: {}", i);
@@ -116,7 +96,6 @@ public class ApiClient {
         RestTemplate restTemplate = new RestTemplate();
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
 
-        // completed
         simpleClientHttpRequestFactory.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyDo.getIp(), proxyDo.getPort())));
 
         restTemplate.setRequestFactory(simpleClientHttpRequestFactory);
@@ -124,7 +103,7 @@ public class ApiClient {
     }
 
     public static void disableSsl() {
-        TrustManager[] trustAllCerts = new TrustManager[] {
+        TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
                     public X509Certificate[] getAcceptedIssuers() {
                         return null;
