@@ -29,7 +29,6 @@ public class UseRoutePlannerProxyExample {
     public static void main(String[] args) throws Exception {
 
         SslUtil.trustAll();
-
         String url = "https://www.google.com/search?q=google&oq=google&gs_lcrp=EgZjaHJvbWUqDAgAECMYJxiABBiKBTIMCAAQIxgnGIAEGIoFMgYIARBFGDwyEggCEC4YQxjHARjRAxiABBiKBTIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRhBMgYIBxBFGDzSAQc4OTFqMGo0qAIAsAIB&sourceid=chrome&ie=UTF-8";
 
         CloseableHttpClient httpclient = HttpClients
