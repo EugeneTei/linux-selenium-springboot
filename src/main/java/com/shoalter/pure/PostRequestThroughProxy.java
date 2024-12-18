@@ -17,7 +17,7 @@ public class PostRequestThroughProxy {
 
     public static void main(String[] args) throws Exception {
 
-        String urlStr = "http://www.example.org/";
+        String urlStr = "http://www.example.org";
 //        urlStr = "https://www.facebook.com/api/graphql/";
 
         SslUtil.trustAll();
