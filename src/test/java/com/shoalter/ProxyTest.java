@@ -22,7 +22,7 @@ public class ProxyTest {
 
     public static void main(String[] args) {
         try {
-            FakeSslUtil.addFakeSsl();
+            SslUtil.trustAll();
             RestTemplate restTemplate = createRestTemplateWithProxy();
             HttpEntity<MultiValueMap<String, String>> entity = createMultiValueMapHttpEntity();
 

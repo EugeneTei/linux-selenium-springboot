@@ -14,12 +14,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
+// Work when request http url
 @Slf4j
 public class ProxyExample {
 
 //    public static final String URL = "http://www.example.org";
-    public static  final String URL = "http://neverssl.com";
-    
+//    public static  final String URL = "http://neverssl.com";
+    public static  final String URL = "https://www.example.com/api";
+
 //    public static  final String URL = "https://www.facebook.com/api/graphql/";
 //    public static final String URL = "https://www.google.com.tw/?hl=zh_TW";
     public static HttpHost proxyHost = new HttpHost("http", "148.66.6.214", 80);

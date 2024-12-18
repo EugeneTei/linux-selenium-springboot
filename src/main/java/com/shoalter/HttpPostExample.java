@@ -11,7 +11,7 @@ public class HttpPostExample {
 
     public static void main(String[] args) {
 
-        FakeSslUtil.addFakeSsl();
+        SslUtil.trustAll();
 
         String proxyHost = "103.152.112.120";
         int proxyPort = 80;

@@ -14,7 +14,7 @@ import org.apache.hc.core5.util.Timeout;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class ProxyFbOnlyApache5 {
+public class ProxyFbUseApache5 {
 
     public static void main(String[] args) {
         String url = "https://www.facebook.com/api/graphql/";
