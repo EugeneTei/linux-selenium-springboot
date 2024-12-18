@@ -1,6 +1,7 @@
 package com.shoalter.apache5;
 
 
+import com.shoalter.SslUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
@@ -18,19 +19,20 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class ProxyExample {
 
-//    public static final String URL = "http://www.example.org";
-//    public static  final String URL = "http://neverssl.com";
-    public static  final String URL = "https://www.example.com/api";
+    //    public static final String URL = "http://www.example.org";
+    public static final String URL = "http://neverssl.com";
 
-//    public static  final String URL = "https://www.facebook.com/api/graphql/";
+    //    public static final String URL = "https://www.example.com/api";
+    //    public static  final String URL = "https://www.facebook.com/api/graphql/";
 //    public static final String URL = "https://www.google.com.tw/?hl=zh_TW";
-    public static HttpHost proxyHost = new HttpHost("http", "148.66.6.214", 80);
+    public static HttpHost PROXY = new HttpHost("http", "44.218.183.55", 80);
 
     public static void main(String[] args) {
 
         try {
+            SslUtil.trustAll();
             CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                    .setProxy(proxyHost)
+                    .setProxy(PROXY)
                     .build();
             client.start();
 

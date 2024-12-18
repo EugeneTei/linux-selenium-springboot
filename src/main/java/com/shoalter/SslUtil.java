@@ -1,8 +1,17 @@
 package com.shoalter;
 
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 public class SslUtil {
@@ -32,5 +41,19 @@ public class SslUtil {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    public static PoolingHttpClientConnectionManager getPoolingHttpClientConnectionManager() throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
+        SSLContext sslContext = SSLContextBuilder.create()
+                .loadTrustMaterial(TrustAllStrategy.INSTANCE) // 信任所有憑證
+                .build();
+        PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setSSLSocketFactory(
+                        SSLConnectionSocketFactoryBuilder.create()
+                                .setSslContext(sslContext) // 使用自定義 SSLContext
+                                .build()
+                )
+                .build();
+        return connectionManager;
     }
 }

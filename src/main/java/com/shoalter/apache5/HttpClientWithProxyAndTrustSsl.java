@@ -1,6 +1,7 @@
 package com.shoalter.apache5;
 
 import com.shoalter.SslUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -20,22 +21,20 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 // Completed
-public class HttpClientWithProxyAndIgnoreSsl {
+@Slf4j
+public class HttpClientWithProxyAndTrustSsl {
 
     public static void main(String[] args) throws Exception {
         String url = "https://www.example.com/api";
-//        url = "http://www.example.org";
 
         SslUtil.trustAll();
 
         HttpHost proxy = new HttpHost("http", "44.218.183.55", 80); // proxy host and port
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
-        PoolingHttpClientConnectionManager connectionManager = getPoolingHttpClientConnectionManager();
-
         CloseableHttpClient httpClient = HttpClients.custom()
-                .setConnectionManager(connectionManager)  // 信任所有憑證（非必要）
-                .setRoutePlanner(routePlanner)            // Use proxy
+                .setConnectionManager(getPoolingHttpClientConnectionManager())  // 信任所有憑證（非必要）
+                .setRoutePlanner(routePlanner)            // Route traffic to proxy
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setConnectTimeout(Timeout.ofSeconds(10))
                         .setResponseTimeout(Timeout.ofSeconds(10))
@@ -51,9 +50,9 @@ public class HttpClientWithProxyAndIgnoreSsl {
                     .returnContent()
                     .asString();
 
-            System.out.println("Response: \n" + response);
+            log.info("Response: \n {}", response);
         } catch (Exception e) {
-            System.err.println("Request failed: " + e.getMessage());
+            log.warn("Request failed: {}", e.getMessage());
         } finally {
             httpClient.close();
         }
