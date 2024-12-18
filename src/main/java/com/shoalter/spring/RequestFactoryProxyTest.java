@@ -1,5 +1,6 @@
-package com.shoalter;
+package com.shoalter.spring;
 
+import com.shoalter.util.SslUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,16 +19,20 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 
 @Slf4j
-public class ProxyTest {
+public class RequestFactoryProxyTest {
 
     public static void main(String[] args) {
         try {
+
+            String url = "https://www.facebook.com/api/graphql/";
+//            url = "https://www.google.com/search?q=google&oq=google&gs_lcrp=EgZjaHJvbWUqDAgAECMYJxiABBiKBTIMCAAQIxgnGIAEGIoFMgYIARBFGDwyEggCEC4YQxjHARjRAxiABBiKBTIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRhBMgYIBxBFGDzSAQgxNzE0ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8"; //can work
+
             SslUtil.trustAll();
             RestTemplate restTemplate = createRestTemplateWithProxy();
             HttpEntity<MultiValueMap<String, String>> entity = createMultiValueMapHttpEntity();
 
             ResponseEntity<String> response = restTemplate.exchange(
-                    "https://www.facebook.com/api/graphql/",
+                    url,
                     HttpMethod.POST,
                     entity,
                     String.class
@@ -52,7 +57,7 @@ public class ProxyTest {
                 super.prepareConnection(connection, httpMethod);
             }
         };
-        simpleClientHttpRequestFactory.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("148.66.6.214", 80)));
+        simpleClientHttpRequestFactory.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("44.218.183.55", 80)));
         restTemplate.setRequestFactory(simpleClientHttpRequestFactory);
         return restTemplate;
     }
@@ -64,6 +69,7 @@ public class ProxyTest {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/x-www-form-urlencoded");
+        headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
         return new HttpEntity<>(params, headers);
     }
 }

@@ -1,6 +1,6 @@
 package com.shoalter.pure;
 
-import com.shoalter.SslUtil;
+import com.shoalter.util.SslUtil;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

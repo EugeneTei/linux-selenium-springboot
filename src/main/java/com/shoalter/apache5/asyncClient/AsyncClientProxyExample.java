@@ -1,7 +1,7 @@
 package com.shoalter.apache5.asyncClient;
 
 
-import com.shoalter.SslUtil;
+import com.shoalter.util.SslUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;

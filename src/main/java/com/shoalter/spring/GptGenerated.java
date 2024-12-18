@@ -1,5 +1,6 @@
-package com.shoalter;
+package com.shoalter.spring;
 
+import com.shoalter.util.SslUtil;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -10,14 +11,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.security.cert.X509Certificate;
 
-public class ByGpt {
+public class GptGenerated {
 
     private static final String proxyHost = "148.66.6.214";
     private static final int proxyPort = 80;
@@ -27,7 +24,7 @@ public class ByGpt {
         String url = "https://www.facebook.com/api/graphql/";
 
         RestTemplate restTemplate = createRestTemplateWithProxy(proxyHost, proxyPort);
-        addFakeSsl();
+        SslUtil.trustAll();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -68,27 +65,5 @@ public class ByGpt {
         factory.setProxy(proxy);
 
         return new RestTemplate(factory);
-    }
-
-    private static void addFakeSsl() {
-        SSLContext ctx;
-        TrustManager[] trustAllCerts = new X509TrustManager[]{new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-            }
-
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-            }
-        }};
-
-        try {
-            ctx = SSLContext.getInstance("SSL");
-            ctx.init(null, trustAllCerts, null);
-            SSLContext.setDefault(ctx);
-        } catch (Exception e) {
-        }
     }
 }

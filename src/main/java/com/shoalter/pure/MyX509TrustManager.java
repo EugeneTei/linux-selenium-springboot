@@ -1,6 +1,6 @@
 package com.shoalter.pure;
 
-import com.shoalter.SslUtil;
+import com.shoalter.util.SslUtil;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -11,10 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.X509Certificate;
 
 public class MyX509TrustManager { //implements X509TrustManager
 

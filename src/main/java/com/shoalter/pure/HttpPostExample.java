@@ -1,4 +1,6 @@
-package com.shoalter;
+package com.shoalter.pure;
+
+import com.shoalter.util.SslUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

@@ -1,4 +1,4 @@
-package com.shoalter;
+package com.shoalter.spring;
 
 public class ProxyPostRequestApplication {
 

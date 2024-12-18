@@ -1,4 +1,4 @@
-package com.shoalter;
+package com.shoalter.util;
 
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;

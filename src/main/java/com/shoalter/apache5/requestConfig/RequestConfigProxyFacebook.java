@@ -1,6 +1,6 @@
 package com.shoalter.apache5.requestConfig;
 
-import com.shoalter.SslUtil;
+import com.shoalter.util.SslUtil;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;

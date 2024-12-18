@@ -1,5 +1,6 @@
-package com.shoalter;
+package com.shoalter.spring;
 
+import com.shoalter.util.SslUtil;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -17,12 +18,14 @@ import java.util.Map;
 public class ApiService {
 
     public static void main(String[] args) {
+        SslUtil.trustAll();
+
         RestTemplate restTemplate = createRestTemplateWithProxy();
 
         String apiUrl = "https://www.facebook.com/api/graphql/";
+        apiUrl = "https://www.google.com/search?q=google&oq=google&gs_lcrp=EgZjaHJvbWUqDAgAECMYJxiABBiKBTIMCAAQIxgnGIAEGIoFMgYIARBFGDwyEggCEC4YQxjHARjRAxiABBiKBTIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRhBMgYIBxBFGDzSAQgxNzE0ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8";
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         String variables = "{\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}";
         String docId = "8973253692695896";
@@ -39,8 +42,8 @@ public class ApiService {
     }
 
     private static RestTemplate createRestTemplateWithProxy() {
-        String proxyHost = "203.95.196.90";
-        int proxyPort = 8080;
+        String proxyHost = "44.218.183.55";
+        int proxyPort = 80;
 
         HttpClientBuilder clientBuilder = HttpClients.custom()
                 .setProxy(new HttpHost(proxyHost, proxyPort));
@@ -48,7 +51,6 @@ public class ApiService {
         // Set up the connection manager to manage connections
         PoolingHttpClientConnectionManager poolingConnManager = new PoolingHttpClientConnectionManager();
         clientBuilder.setConnectionManager(poolingConnManager);
-
 
         // Create the HttpClient with the configuration
         HttpClient httpClient = clientBuilder.build();

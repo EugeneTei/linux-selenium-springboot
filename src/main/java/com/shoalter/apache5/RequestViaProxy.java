@@ -1,6 +1,6 @@
 package com.shoalter.apache5;
 
-import com.shoalter.SslUtil;
+import com.shoalter.util.SslUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.http.HttpHost;

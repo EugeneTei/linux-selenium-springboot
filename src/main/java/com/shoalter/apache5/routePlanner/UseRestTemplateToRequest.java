@@ -1,6 +1,6 @@
 package com.shoalter.apache5.routePlanner;
 
-import com.shoalter.SslUtil;
+import com.shoalter.util.SslUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
