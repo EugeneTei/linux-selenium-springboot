@@ -23,7 +23,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
-public class UseRequestConfigProxy {
+public class UseRequestConfigProxyExample {
 
     public static void main(String[] args) throws Exception {
 
