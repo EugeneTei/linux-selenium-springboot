@@ -1,7 +1,7 @@
-package com.shoalter.apache5;
+package com.shoalter.apache5.requestConfig;
 
 import com.shoalter.SslUtil;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -11,7 +11,6 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuil
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 
 import javax.net.ssl.SSLContext;
@@ -24,35 +23,30 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
-public class UseRequestConfigProxyFacebook {
-
-    private static final String url = "https://www.facebook.com/api/graphql/";
-
-    private static final String body = "variables={\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}&doc_id=8973253692695896";
+public class UseRequestConfigProxyExample {
 
     public static void main(String[] args) throws Exception {
 
         SslUtil.trustAll();
 
+        String url = "https://www.google.com/search?q=google&oq=google&gs_lcrp=EgZjaHJvbWUqDAgAECMYJxiABBiKBTIMCAAQIxgnGIAEGIoFMgYIARBFGDwyEggCEC4YQxjHARjRAxiABBiKBTIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRhBMgYIBxBFGDzSAQc4OTFqMGo0qAIAsAIB&sourceid=chrome&ie=UTF-8";
+//        url = "";
+
         CloseableHttpClient httpclient = HttpClients
                 .custom()
                 .setConnectionManager(getPoolingHttpClientConnectionManager())
                 .build();
-        HttpPost httpPost = new HttpPost("http://www.example.org/");
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36");
-        httpPost.setEntity(new StringEntity(body));
-        httpPost.setConfig(getRequestConfig());
+        HttpGet request = new HttpGet(url);
 
-        CloseableHttpResponse response = httpclient.execute(httpPost);
+        request.setConfig(
+                RequestConfig.custom()
+                        .setProxy(new HttpHost("44.218.183.55", 80))
+                        .build()
+        );
+
+        CloseableHttpResponse response = httpclient.execute(request);
 
         printResponse(response);
-    }
-
-    private static RequestConfig getRequestConfig() {
-        return RequestConfig.custom()
-                .setProxy(new HttpHost("44.218.183.55", 80))
-                .build();
     }
 
     private static void printResponse(CloseableHttpResponse response) throws IOException {
