@@ -1,17 +1,12 @@
-package com.shoalter.apache5;
+package com.shoalter.apache5.routePlanner;
 
 import com.shoalter.SslUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
-import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
-import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.util.Timeout;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,16 +17,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 @Slf4j
-public class ProxyUseRestTemplateToRequest {
+public class UseRestTemplateToRequest {
 
     private static final String URL = "https://www.facebook.com/api/graphql/";
-//    private static final String PROXY_HOST = "3.90.100.12"; //https
+    //    private static final String PROXY_HOST = "3.90.100.12"; //https
 //    private static final String PROXY_HOST = "54.152.3.36";
     private static final String PROXY_HOST = "44.219.175.186";
     private static final int PROXY_PORT = 80;
@@ -60,7 +54,7 @@ public class ProxyUseRestTemplateToRequest {
                 .build();
 
         CloseableHttpClient httpClient = HttpClients.custom()
-                .setConnectionManager(getPoolingHttpClientConnectionManager())
+                .setConnectionManager(SslUtil.getPoolingHttpClientConnectionManager())
                 .setDefaultRequestConfig(requestConfig)
                 .setRoutePlanner(routePlanner)
                 .build();
@@ -78,19 +72,5 @@ public class ProxyUseRestTemplateToRequest {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         return new HttpEntity<>(body, headers);
-    }
-
-    private static PoolingHttpClientConnectionManager getPoolingHttpClientConnectionManager() throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
-        SSLContext sslContext = SSLContextBuilder.create()
-                .loadTrustMaterial(TrustAllStrategy.INSTANCE) // 信任所有憑證
-                .build();
-        PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
-                .setSSLSocketFactory(
-                        SSLConnectionSocketFactoryBuilder.create()
-                                .setSslContext(sslContext) // 使用自定義 SSLContext
-                                .build()
-                )
-                .build();
-        return connectionManager;
     }
 }

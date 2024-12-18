@@ -45,7 +45,7 @@ public class OkHttpProxy {
                 .build();
 
         String url = "https://www.example.org/";
-        url = "https://httpbin.org/ip";
+//        url = "https://httpbin.org/ip"; // can work
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
 

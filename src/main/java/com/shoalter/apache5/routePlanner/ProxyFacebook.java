@@ -1,4 +1,4 @@
-package com.shoalter.apache5;
+package com.shoalter.apache5.routePlanner;
 
 import com.shoalter.SslUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -8,22 +8,18 @@ import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
-import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
-import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicHeader;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
-import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.util.Timeout;
 import org.jetbrains.annotations.NotNull;
 
-import javax.net.ssl.SSLContext;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -57,26 +53,30 @@ public class ProxyFacebook {
                 log.info("Status Code: {}", statusCode);
 
                 HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    long length = entity.getContentLength();
-                    if (length != -1 && length < 2048) {
-                        String responseBody = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-                        log.info("less than 2048: \n{}", responseBody);
-                    } else {
-                        // 資料過長，使用 Stream 讀取
-                        InputStream in = entity.getContent();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-                        StringBuilder responseBody = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            responseBody.append(line).append("\n");
-                        }
-                        log.info("Greater than 2048: \n{}", responseBody);
-                    }
-                }
+                printResponse(entity);
             }
         } finally {
             httpClient.close();
+        }
+    }
+
+    private static void printResponse(HttpEntity entity) throws IOException, ParseException {
+        if (entity != null) {
+            long length = entity.getContentLength();
+            if (length != -1 && length < 2048) {
+                String responseBody = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+                log.info("less than 2048: \n{}", responseBody);
+            } else {
+                // 資料過長，使用 Stream 讀取
+                InputStream in = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+                StringBuilder responseBody = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseBody.append(line).append("\n");
+                }
+                log.info("Greater than 2048: \n{}", responseBody);
+            }
         }
     }
 
@@ -85,28 +85,14 @@ public class ProxyFacebook {
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
         CloseableHttpClient httpClient = HttpClients.custom()
-                .setConnectionManager(getPoolingHttpClientConnectionManager())
-//                .setRoutePlanner(routePlanner)            // Route traffic to proxy
+                .setConnectionManager(SslUtil.getPoolingHttpClientConnectionManager())
+                .setRoutePlanner(routePlanner)            // Route traffic to proxy
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setConnectTimeout(Timeout.ofSeconds(10))
                         .setResponseTimeout(Timeout.ofSeconds(10))
                         .build())
                 .build();
         return httpClient;
-    }
-
-    private static PoolingHttpClientConnectionManager getPoolingHttpClientConnectionManager() throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
-        SSLContext sslContext = SSLContextBuilder.create()
-                .loadTrustMaterial(TrustAllStrategy.INSTANCE) // 信任所有憑證
-                .build();
-        PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
-                .setSSLSocketFactory(
-                        SSLConnectionSocketFactoryBuilder.create()
-                                .setSslContext(sslContext) // 使用自定義 SSLContext
-                                .build()
-                )
-                .build();
-        return connectionManager;
     }
 
     private static @NotNull HttpPost getHttpPost(String url) {
