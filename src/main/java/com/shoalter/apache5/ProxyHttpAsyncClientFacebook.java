@@ -58,9 +58,9 @@ public class ProxyHttpAsyncClientFacebook {
     private static CloseableHttpAsyncClient getClient() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(PROXY);
         return HttpAsyncClients.custom()
-//                .setProxy(PROXY)
+                .setProxy(PROXY)
                 .setConnectionManager(getClientConnectionManager())
-//                .setRoutePlanner(routePlanner)
+                .setRoutePlanner(routePlanner)
                 .build();
     }
 

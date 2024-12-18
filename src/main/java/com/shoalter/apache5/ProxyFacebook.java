@@ -13,14 +13,19 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuil
 import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.message.BasicHeader;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.hc.core5.util.Timeout;
+import org.jetbrains.annotations.NotNull;
 
 import javax.net.ssl.SSLContext;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -37,39 +42,51 @@ public class ProxyFacebook {
     public static void main(String[] args) throws Exception {
 
         String url = "https://www.facebook.com/api/graphql/";
-//        url = "https://www.example.org/";
+        url = "https://www.example.org/";
 
         SslUtil.trustAll();
 
         CloseableHttpClient httpClient = getCloseableHttpClient();
 
         try {
-            HttpPost postRequest = new HttpPost(url);
-            postRequest.setHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded"));
-            postRequest.setHeader(new BasicHeader("Accept-encoding", "gzip, deflate, br, zstd"));
-            postRequest.setHeader(new BasicHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"));
-
-            List<BasicNameValuePair> formParams = getBasicNameValuePairs();
-            postRequest.setEntity(new UrlEncodedFormEntity(formParams, StandardCharsets.UTF_8));
+            HttpPost postRequest = getHttpPost(url);
 
             try (CloseableHttpResponse response = httpClient.execute(postRequest)) {
-                int statusCode = response.getCode();
-                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
+                int statusCode = response.getCode();
                 log.info("Status Code: {}", statusCode);
-                log.info("Response Body: \n{}", responseBody);
+
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    long length = entity.getContentLength();
+                    if (length != -1 && length < 2048) {
+                        String responseBody = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+                        log.info("less than 2048: \n{}", responseBody);
+                    } else {
+                        // 資料過長，使用 Stream 讀取
+                        InputStream in = entity.getContent();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+                        StringBuilder responseBody = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            responseBody.append(line).append("\n");
+                        }
+                        log.info("Greater than 2048: \n{}", responseBody);
+                    }
+                }
             }
         } finally {
             httpClient.close();
         }
     }
 
+
     private static CloseableHttpClient getCloseableHttpClient() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(getPoolingHttpClientConnectionManager())
-                .setRoutePlanner(routePlanner)            // Route traffic to proxy
+//                .setRoutePlanner(routePlanner)            // Route traffic to proxy
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setConnectTimeout(Timeout.ofSeconds(10))
                         .setResponseTimeout(Timeout.ofSeconds(10))
@@ -90,6 +107,17 @@ public class ProxyFacebook {
                 )
                 .build();
         return connectionManager;
+    }
+
+    private static @NotNull HttpPost getHttpPost(String url) {
+        HttpPost postRequest = new HttpPost(url);
+        postRequest.setHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded"));
+        postRequest.setHeader(new BasicHeader("Accept-encoding", "gzip, deflate, br, zstd"));
+        postRequest.setHeader(new BasicHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"));
+
+        List<BasicNameValuePair> formParams = getBasicNameValuePairs();
+        postRequest.setEntity(new UrlEncodedFormEntity(formParams, StandardCharsets.UTF_8));
+        return postRequest;
     }
 
     private static List<BasicNameValuePair> getBasicNameValuePairs() {

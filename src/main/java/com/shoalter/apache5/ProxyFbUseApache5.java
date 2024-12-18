@@ -1,5 +1,6 @@
 package com.shoalter.apache5;
 
+import com.shoalter.SslUtil;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -17,9 +18,10 @@ import java.io.InputStreamReader;
 public class ProxyFbUseApache5 {
 
     public static void main(String[] args) {
+        SslUtil.trustAll();
         String url = "https://www.facebook.com/api/graphql/";
 
-        HttpHost proxy = new HttpHost("http", "148.66.6.214", 80);
+        HttpHost proxy = new HttpHost("http", "44.218.183.55", 80);
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
         RequestConfig requestConfig = RequestConfig.custom()
@@ -33,11 +35,10 @@ public class ProxyFbUseApache5 {
                 .setRoutePlanner(routePlanner)
                 .build()) {
 
-            // 創建 POST 請求
             HttpPost httpPost = new HttpPost(url);
 
-            // 設定 Content-Type 標頭
             httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36");
 
             // 設定請求 Body 參數
             String body = "variables={\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}"
