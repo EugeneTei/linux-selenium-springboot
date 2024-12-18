@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public class ApiClientBySpring {
+public class ProxyExampleBySpring {
 
 //    private static final String URL = "https://www.facebook.com/api/graphql/";
 //    private static final String URL = "https://www.google.com/search?q=apple&sca_esv=0c2c2c7fe2c65901&sxsrf=ADLYWIJCnXYg_QoQgv8KL8Rw6ISOgMx8mQ%3A1734495380189&ei=lExiZ5iAC7Gcvr0PlKiIqAc&ved=0ahUKEwiYmoDourCKAxUxjq8BHRQUAnUQ4dUDCBA&uact=5&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlMgoQIxiABBgnGIoFMgoQIxiABBgnGIoFMgQQIxgnMhYQLhiABBixAxjRAxhDGMcBGMkDGIoFMg0QABiABBixAxhDGIoFMhMQLhiABBixAxjRAxhDGMcBGIoFMgoQABiABBhDGIoFMg0QABiABBixAxhDGIoFMhAQLhiABBjRAxhDGMcBGIoFMgsQABiABBiSAxiKBTIlEC4YgAQYsQMY0QMYQxjHARjJAxiKBRiXBRjcBBjeBBjgBNgBAUjVCVC6A1inCXABeAGQAQCYATmgAdABqgEBNLgBA8gBAPgBAZgCBaAC5wHCAgcQIxiwAxgnwgIKEAAYsAMY1gQYR8ICDhAuGIAEGLEDGNEDGMcBwgIIEAAYgAQYsQPCAhEQLhiABBixAxjRAxiDARjHAcICBRAAGIAEwgIdEC4YgAQYsQMY0QMYxwEYlwUY3AQY3gQY4ATYAQHCAiIQLhiABBixAxjRAxhDGMcBGIoFGJcFGNwEGN4EGOAE2AEBmAMAiAYBkAYKugYGCAEQARgUkgcBNaAHvTA&sclient=gws-wiz-serp";
