@@ -31,40 +31,42 @@ import java.util.List;
 @Slf4j
 public class ProxyFacebook {
 
-    public static final String URL = "https://www.facebook.com/api/graphql/";
     public static final HttpHost proxy = new HttpHost("44.218.183.55", 80);
 //    public static final HttpHost proxy = new HttpHost("3.90.100.12", 80);
 
     public static void main(String[] args) throws Exception {
 
+        String url = "https://www.facebook.com/api/graphql/";
+//        url = "https://www.example.org/";
+
         SslUtil.trustAll();
-        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-        CloseableHttpClient httpClient = getCloseableHttpClient(routePlanner);
+
+        CloseableHttpClient httpClient = getCloseableHttpClient();
 
         try {
-            HttpPost postRequest = new HttpPost(URL);
+            HttpPost postRequest = new HttpPost(url);
             postRequest.setHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded"));
             postRequest.setHeader(new BasicHeader("Accept-encoding", "gzip, deflate, br, zstd"));
             postRequest.setHeader(new BasicHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"));
 
-            List<BasicNameValuePair> formParams = new ArrayList<>();
-            formParams.add(new BasicNameValuePair("variables", "{\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}"));
-            formParams.add(new BasicNameValuePair("doc_id", "8973253692695896"));
+            List<BasicNameValuePair> formParams = getBasicNameValuePairs();
             postRequest.setEntity(new UrlEncodedFormEntity(formParams, StandardCharsets.UTF_8));
 
             try (CloseableHttpResponse response = httpClient.execute(postRequest)) {
                 int statusCode = response.getCode();
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
-                System.out.println("Status Code: " + statusCode);
-                System.out.println("Response Body: \n" + responseBody);
+                log.info("Status Code: {}", statusCode);
+                log.info("Response Body: \n{}", responseBody);
             }
         } finally {
             httpClient.close();
         }
     }
 
-    private static CloseableHttpClient getCloseableHttpClient(DefaultProxyRoutePlanner routePlanner) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    private static CloseableHttpClient getCloseableHttpClient() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(getPoolingHttpClientConnectionManager())
                 .setRoutePlanner(routePlanner)            // Route traffic to proxy
@@ -88,5 +90,12 @@ public class ProxyFacebook {
                 )
                 .build();
         return connectionManager;
+    }
+
+    private static List<BasicNameValuePair> getBasicNameValuePairs() {
+        List<BasicNameValuePair> formParams = new ArrayList<>();
+        formParams.add(new BasicNameValuePair("variables", "{\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}"));
+        formParams.add(new BasicNameValuePair("doc_id", "8973253692695896"));
+        return formParams;
     }
 }
