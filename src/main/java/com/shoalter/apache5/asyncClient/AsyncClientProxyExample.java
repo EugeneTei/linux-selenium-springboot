@@ -25,7 +25,7 @@ public class AsyncClientProxyExample {
     //    public static final String URL = "https://www.example.com/api";
     //    public static  final String URL = "https://www.facebook.com/api/graphql/";
 //    public static final String URL = "https://www.google.com.tw/?hl=zh_TW";
-    public static HttpHost PROXY = new HttpHost("http", "44.218.183.55", 80);
+    public static HttpHost PROXY = new HttpHost("http", "87.248.129.26", 80);
 
     public static void main(String[] args) throws IOException, URISyntaxException, ExecutionException, InterruptedException {
 

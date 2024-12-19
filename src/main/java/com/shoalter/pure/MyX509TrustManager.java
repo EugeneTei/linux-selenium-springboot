@@ -14,8 +14,8 @@ import java.net.URL;
 
 public class MyX509TrustManager { //implements X509TrustManager
 
-    private static final String PROXY_HOST = "44.218.183.55";
-    private static final int PROXY_PORT = 80;
+    private static final String PROXY_HOST = "8.213.222.247";
+    private static final int PROXY_PORT = 3128;
 
     private static final String REQUEST_BODY = "variables={\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}&doc_id=8973253692695896";
 

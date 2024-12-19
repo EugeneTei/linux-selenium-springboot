@@ -22,7 +22,7 @@ public class RequestConfigProxyFacebook {
 
     private static final String body = "variables={\"cursor\": \"\", \"id\": \"100044641110094\", \"count\": 3}&doc_id=8973253692695896";
 
-    private static final HttpHost PROXY = new HttpHost("44.218.183.55", 80);
+    private static final HttpHost PROXY = new HttpHost("8.220.204.215", 80);
 
     public static void main(String[] args) throws Exception {
 

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProxyDo {
 
-    private String host;
+    private String ip;
     private int port;
 }

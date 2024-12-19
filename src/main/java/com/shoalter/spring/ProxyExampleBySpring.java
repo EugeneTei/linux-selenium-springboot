@@ -28,9 +28,9 @@ import java.util.concurrent.ThreadLocalRandom;
 @Slf4j
 public class ProxyExampleBySpring {
 
-//    private static final String URL = "https://www.facebook.com/api/graphql/";
+    private static final String URL = "https://www.facebook.com/api/graphql/";
 //    private static final String URL = "https://www.google.com/search?q=apple&sca_esv=0c2c2c7fe2c65901&sxsrf=ADLYWIJCnXYg_QoQgv8KL8Rw6ISOgMx8mQ%3A1734495380189&ei=lExiZ5iAC7Gcvr0PlKiIqAc&ved=0ahUKEwiYmoDourCKAxUxjq8BHRQUAnUQ4dUDCBA&uact=5&oq=apple&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWFwcGxlMgoQIxiABBgnGIoFMgoQIxiABBgnGIoFMgQQIxgnMhYQLhiABBixAxjRAxhDGMcBGMkDGIoFMg0QABiABBixAxhDGIoFMhMQLhiABBixAxjRAxhDGMcBGIoFMgoQABiABBhDGIoFMg0QABiABBixAxhDGIoFMhAQLhiABBjRAxhDGMcBGIoFMgsQABiABBiSAxiKBTIlEC4YgAQYsQMY0QMYQxjHARjJAxiKBRiXBRjcBBjeBBjgBNgBAUjVCVC6A1inCXABeAGQAQCYATmgAdABqgEBNLgBA8gBAPgBAZgCBaAC5wHCAgcQIxiwAxgnwgIKEAAYsAMY1gQYR8ICDhAuGIAEGLEDGNEDGMcBwgIIEAAYgAQYsQPCAhEQLhiABBixAxjRAxiDARjHAcICBRAAGIAEwgIdEC4YgAQYsQMY0QMYxwEYlwUY3AQY3gQY4ATYAQHCAiIQLhiABBixAxjRAxhDGMcBGIoFGJcFGNwEGN4EGOAE2AEBmAMAiAYBkAYKugYGCAEQARgUkgcBNaAHvTA&sclient=gws-wiz-serp";
-    private static final String URL = "https://www.hktvmall.com/";
+//    private static final String URL = "https://www.hktvmall.com/";
 
     public static void main(String[] args) throws Exception {
 
@@ -43,7 +43,7 @@ public class ProxyExampleBySpring {
 
             ProxyDo proxyDo = proxyDoList.get(ThreadLocalRandom.current().nextInt(proxyDoList.size()));
 
-            log.info("HOST: {}", proxyDo.getHost());
+            log.info("HOST: {}", proxyDo.getIp());
 
             execute(proxyDo);
 
@@ -88,6 +88,9 @@ public class ProxyExampleBySpring {
     private static HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+        headers.set("accept-encoding", "gzip, deflate, br, zstd");
+        headers.set("accept-language", "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7");
         return headers;
     }
 
@@ -109,7 +112,7 @@ public class ProxyExampleBySpring {
         simpleClientHttpRequestFactory.setConnectTimeout(5000); // milliseconds
         simpleClientHttpRequestFactory.setReadTimeout(5000); // milliseconds
 
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyDo.getHost(), proxyDo.getPort()));
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyDo.getIp(), proxyDo.getPort()));
         simpleClientHttpRequestFactory.setProxy(proxy);
 
         restTemplate.setRequestFactory(simpleClientHttpRequestFactory);

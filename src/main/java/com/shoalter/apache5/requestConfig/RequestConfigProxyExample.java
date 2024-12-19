@@ -17,13 +17,14 @@ import java.nio.charset.StandardCharsets;
 // Request google-search url through a proxy and it can work !
 public class RequestConfigProxyExample {
 
-    private static final HttpHost PROXY = new HttpHost("44.218.183.55", 80);
+    private static final HttpHost PROXY = new HttpHost("87.248.129.26", 80);
 
     public static void main(String[] args) throws Exception {
 
         SslUtil.trustAll();
 
         String url = "https://www.google.com/search?q=google&oq=google&gs_lcrp=EgZjaHJvbWUqDAgAECMYJxiABBiKBTIMCAAQIxgnGIAEGIoFMgYIARBFGDwyEggCEC4YQxjHARjRAxiABBiKBTIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRhBMgYIBxBFGDzSAQc4OTFqMGo0qAIAsAIB&sourceid=chrome&ie=UTF-8";
+        url = "https://example.com";
 
         CloseableHttpClient httpclient = HttpClients
                 .custom()

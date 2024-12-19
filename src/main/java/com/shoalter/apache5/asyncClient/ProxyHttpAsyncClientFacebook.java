@@ -27,7 +27,7 @@ import java.util.concurrent.Future;
 public class ProxyHttpAsyncClientFacebook {
 
 
-    public static HttpHost PROXY = new HttpHost("http", "44.218.183.55", 80);
+    public static HttpHost PROXY = new HttpHost("http", "87.248.129.26", 80);
 
     public static void main(String[] args) throws Exception {
 
