@@ -1,4 +1,4 @@
-package com.shoalter;
+package com.shoalter.job;
 
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;

@@ -1,4 +1,4 @@
-package com.shoalter;
+package com.shoalter.job;
 
 import java.util.Map;
 

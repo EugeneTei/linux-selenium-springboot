@@ -1,4 +1,4 @@
-package com.shoalter;
+package com.shoalter.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

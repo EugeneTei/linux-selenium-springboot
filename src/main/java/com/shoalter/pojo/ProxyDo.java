@@ -1,4 +1,4 @@
-package com.shoalter.test.pojo;
+package com.shoalter.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

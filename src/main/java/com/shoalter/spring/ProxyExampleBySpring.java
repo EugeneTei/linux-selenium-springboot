@@ -3,7 +3,7 @@ package com.shoalter.spring;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shoalter.util.SslUtil;
-import com.shoalter.test.pojo.ProxyDo;
+import com.shoalter.pojo.ProxyDo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
