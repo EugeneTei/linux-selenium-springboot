@@ -32,13 +32,13 @@ import java.util.List;
 @Slf4j
 public class ProxyFacebook {
 
-    public static final HttpHost proxy = new HttpHost("44.218.183.55", 80);
+    public static final HttpHost proxy = new HttpHost("3.127.121.101", 3128);
 //    public static final HttpHost proxy = new HttpHost("3.90.100.12", 80);
 
     public static void main(String[] args) throws Exception {
 
         String url = "https://www.facebook.com/api/graphql/";
-        url = "https://www.example.org/";
+//        url = "https://www.example.org/";
 
         SslUtil.trustAll();
 
